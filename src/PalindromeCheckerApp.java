@@ -3,29 +3,31 @@ import java.util.*;
 import static java.util.Collections.reverse;
 
 public class PalindromeCheckerApp {
-     public static void main(String[] args){
-         String input = "madam";
-         boolean result = isPalindrome (input, 0, input.length() - 1);
+    public static void main(String[] args) {
+        String input = "A man a plan a canal Panama";
 
-         if (result) {
-             System.out.println("The string is a palindrome. ");
-         } else {
-             System.out.println("The string is not a palindrome. ");
-         }
-     }
+        // Normalize the string
+        String normalized = input
+                .replaceAll("[^a-zA-Z0-9]", "")
+                .toLowerCase();
+        boolean isPalindrome = true;
 
-     // Recursive method
-    public static boolean isPalindrome(String str, int start, int end){
+        // Compare characters from both ends
+        for (int i = 0; i < normalized.length() / 2; i++) {
 
-         // If pointers cross or meet
-        if (start >= end){
-            return true;
+            // Compare symmetric characters
+            if(normalized.charAt(i) != normalized.charAt(normalized.length() - 1 - i)){
+                isPalindrome = false;
+                break;
+
+            }
         }
 
-        // If mismatch found
-        if (str.charAt(start) != str.charAt(end)){
-            return false;
+        // Result
+        if(isPalindrome){
+            System.out.println("The string is a palindrome. ");
+        } else {
+            System.out.println("The String is not a palindrome. ");
         }
-        return isPalindrome(str, start +1, end - 1 );
     }
 }
