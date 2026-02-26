@@ -1,33 +1,46 @@
 import java.util.*;
 
-import static java.util.Collections.reverse;
+class PalindromeService {
 
-public class PalindromeCheckerApp {
-    public static void main(String[] args) {
-        String input = "A man a plan a canal Panama";
+    // Encapsulated palindrome logic
+    public boolean checkPalindrome(String input) {
 
-        // Normalize the string
-        String normalized = input
-                .replaceAll("[^a-zA-Z0-9]", "")
-                .toLowerCase();
-        boolean isPalindrome = true;
+        // Normalize string (optional enhancement)
+        input = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
 
-        // Compare characters from both ends
-        for (int i = 0; i < normalized.length() / 2; i++) {
+        int start = 0;
+        int end = input.length() - 1;
 
-            // Compare symmetric characters
-            if(normalized.charAt(i) != normalized.charAt(normalized.length() - 1 - i)){
-                isPalindrome = false;
-                break;
+        // Two-pointer comparison
+        while (start < end) {
 
+            if (input.charAt(start) != input.charAt(end)) {
+                return false;
             }
+
+            start++;
+            end--;
         }
 
-        // Result
-        if(isPalindrome){
-            System.out.println("The string is a palindrome. ");
+        return true;
+    }
+}
+
+public class PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+
+        String input = "A man a plan a canal Panama";
+
+        // Object creation
+        PalindromeService service = new PalindromeService();
+
+        boolean isPalindrome = service.checkPalindrome(input);
+
+        if (isPalindrome) {
+            System.out.println("The string is a palindrome.");
         } else {
-            System.out.println("The String is not a palindrome. ");
+            System.out.println("The string is NOT a palindrome.");
         }
     }
 }
