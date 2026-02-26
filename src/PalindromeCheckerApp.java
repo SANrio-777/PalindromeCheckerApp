@@ -1,41 +1,83 @@
 import java.util.*;
 
-class PalindromeService {
+// Strategy Interface
+interface PalindromeStrategy {
+    boolean check(String input);
+}
 
-    // Encapsulated palindrome logic
-    public boolean checkPalindrome(String input) {
+// Stack-Based Strategy
+class StackStrategy implements PalindromeStrategy {
 
-        // Normalize string (optional enhancement)
-        input = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+    public boolean check(String input) {
 
-        int start = 0;
-        int end = input.length() - 1;
+        Stack<Character> stack = new Stack<>();
 
-        // Two-pointer comparison
-        while (start < end) {
+        // Push characters onto stack
+        for (char c : input.toCharArray()) {
+            stack.push(c);
+        }
 
-            if (input.charAt(start) != input.charAt(end)) {
+        // Compare while popping
+        for (char c : input.toCharArray()) {
+            if (c != stack.pop()) {
                 return false;
             }
-
-            start++;
-            end--;
         }
 
         return true;
     }
 }
 
+// Deque-Based Strategy
+class DequeStrategy implements PalindromeStrategy {
+
+    public boolean check(String input) {
+
+        Deque<Character> deque = new ArrayDeque<>();
+
+        for (char c : input.toCharArray()) {
+            deque.add(c);
+        }
+
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+// Context Class
+class PalindromeChecker {
+
+    private PalindromeStrategy strategy;
+
+    // Constructor Injection
+    public PalindromeChecker(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean checkPalindrome(String input) {
+        return strategy.check(input);
+    }
+}
+
+// Main Application
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String input = "A man a plan a canal Panama";
+        String input = "level";
 
-        // Object creation
-        PalindromeService service = new PalindromeService();
+        // 🔹 Choose strategy dynamically
+        PalindromeStrategy strategy = new StackStrategy();
+        // PalindromeStrategy strategy = new DequeStrategy();
 
-        boolean isPalindrome = service.checkPalindrome(input);
+        PalindromeChecker checker = new PalindromeChecker(strategy);
+
+        boolean isPalindrome = checker.checkPalindrome(input);
 
         if (isPalindrome) {
             System.out.println("The string is a palindrome.");
